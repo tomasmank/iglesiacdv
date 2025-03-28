@@ -70,7 +70,7 @@ const MyApp: React.FC = () => {
           left: 0,
           right: 0,
           bottom: 0,
-          backgroundImage: `url(/background${isDarkMode()  ? 'dark' : ''}.png)`, // Ruta del archivo PNG
+          backgroundImage: `url(${process.env.PUBLIC_URL}/background${isDarkMode() ? 'dark' : ''}.png)`,
           backgroundSize: '80%', // Asegura que el fondo cubra toda la pantalla
           backgroundPosition: 'center', // Centra la imagen
           opacity: 0.1, // Aplica opacidad solo al fondo PNG
