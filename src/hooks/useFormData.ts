@@ -1,14 +1,12 @@
-// useFormData.ts
+import { useState, useCallback } from 'react';
+import { FormData } from '../interfaces/interfaces';
 
-import { useState } from 'react';
-import { FormData } from '../interfaces/interfaces'; // Asegúrate de tener la interfaz importada desde el archivo de interfaces
-
-// Función para obtener los valores predeterminados
 const getDefaultFormData = (): FormData => ({
   nombre: '',
   apellido: '',
   fechaNacimiento: null,
   nacionalidad: '',
+  otraNacionalidad: '',
   direccion: '',
   telefono: '',
   mail: '',
@@ -32,9 +30,47 @@ const getDefaultFormData = (): FormData => ({
   hijos: [],
 });
 
-// Hook personalizado para manejar el estado de FormData
 export const useFormData = () => {
-  return useState<FormData>(getDefaultFormData());
-};
+  const [formData, setFormData] = useState<FormData>(getDefaultFormData());
+  const [showAdditionalActions, setShowAdditionalActions] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState(false);
+  // Función para resetear el formulario
+  const resetForm = useCallback((keepChildren = false) => {
+    setFormData(prev => ({
+      ...getDefaultFormData(),
+      ...(keepChildren && {
+        cantidadHijos: prev.cantidadHijos,
+        hijos: prev.hijos
+      })
+    }));
+    setShowAdditionalActions(false);
+    setFormSubmitted(false);
+  }, []);
 
-export {};
+  const handleAddAnother = () => {
+    setShowAdditionalActions(formData.cantidadHijos > 0);
+    if (formData.cantidadHijos <= 0) resetForm();
+  };
+  // Función para actualizar campos específicos
+  const updateField = useCallback(<K extends keyof FormData>(
+    field: K,
+    value: FormData[K]
+  ) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }, []);
+
+  return {
+    formData,
+    setFormData,
+    resetForm,
+    updateField,
+    showAdditionalActions,
+    handleAddAnother,
+    formSubmitted,
+    setFormSubmitted,
+    getDefaultFormData // Exportamos por si se necesita
+  };
+};

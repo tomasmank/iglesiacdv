@@ -1,6 +1,3 @@
-// interfaces.ts
-
-// Interfaz para los datos de cada hijo
 export interface DatosHijos {
     nombre: string;
     edad: number;
@@ -12,12 +9,13 @@ export interface DatosHijos {
     hijos: DatosHijos[];
     handleHijosSave: (hijos:DatosHijos[]) => void;
   }
-  // Interfaz para el estado del formulario
+  export type SetFormData = React.Dispatch<React.SetStateAction<FormData>>;
   export interface FormData {
     nombre: string;
     apellido: string;
     fechaNacimiento: Date | null;
     nacionalidad: string;
+    otraNacionalidad: string;
     direccion: string;
     telefono: string;
     mail: string;
