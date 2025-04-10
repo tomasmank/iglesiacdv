@@ -28,10 +28,13 @@ const Formulario: React.FC = () => {
         e.preventDefault();
         setFormSubmitted(true);
       }}>
+        {
+        !formSubmitted && <>
         <FormularioPersonal formData={formData} setFormData={setFormData} />
         <FormularioProfesional formData={formData} setFormData={setFormData} />
         <FormularioEspiritual formData={formData} setFormData={setFormData} />
-
+        </>
+        }
         <FormActions
           onSubmit={() => setFormSubmitted(true)}
           onReset={() => resetForm()}
