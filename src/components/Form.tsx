@@ -7,31 +7,29 @@ import FormularioPersonal from './Formulario/FormularioPersonal';
 import FormularioProfesional from './Formulario/FormularioProfesional';
 import FormularioEspiritual from './Formulario/FormularioEspiritual';
 import FormActions from './Formulario/FormActions';
+import { FormProvider, useFormContext } from '../hooks/FormContext';
 
 const Formulario: React.FC = () => {
   const {
-    formData,
     setFormSubmitted,
     formSubmitted,
-    showAdditionalActions,
-    resetForm,
-    handleAddAnother,
     validateForm
-  } = useFormData();
+  } = useFormContext();
 
-  const handleSubmit = () => {
-    const isValid = validateForm(); // Validar al hacer click
-    // Aquí podrías agregar validación antes de enviar
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Espera a que React actualice el estado (solución para asincronía)
+    await new Promise(resolve => setTimeout(resolve, 0));
+    
+    const isValid = validateForm();
+  
     if (isValid) {
       setFormSubmitted(true);
-      // Enviar datos o continuar con el flujo
     }
   };
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-      <form autoComplete= 'off'>
         {!formSubmitted && (
           <>
             <FormularioPersonal />
@@ -41,18 +39,12 @@ const Formulario: React.FC = () => {
         )}
         <FormActions
           onSubmit={handleSubmit}
-          onReset={resetForm}
-          onAddAnother={handleAddAnother}
-          onKeepChildren={(keep) => resetForm(keep)}
           isSubmitted={formSubmitted}
-          showAdditionalActions={showAdditionalActions}
-          hasChildren={formData.cantidadHijos > 0}
           submitButtonProps={{ fullWidth: true }}
           resetButtonProps={{ fullWidth: true }}
         />
-      </form>
     </LocalizationProvider>
   );
 };
 
-export default React.memo(Formulario); // Optimización para evitar re-renders innecesarios
+export default Formulario; // Optimización para evitar re-renders innecesarios

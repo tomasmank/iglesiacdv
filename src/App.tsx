@@ -7,6 +7,7 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 // Assets
 import logo from './assets/logo.png';
 import logodark from './assets/logodark.png';
+import { FormProvider } from './hooks/FormContext';
 
 const theme = createTheme({
   colorSchemes: {
@@ -63,7 +64,8 @@ const Layout: React.FC = () => {
         
         <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
           <Header logo={assets.logo} isDarkMode={isDarkMode} />
-          <Formulario />
+          <FormProvider><Formulario /></FormProvider>
+          
         </Container>
       </Box>
     </>

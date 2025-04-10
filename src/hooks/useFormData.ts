@@ -103,7 +103,7 @@ export const useFormData = () => {
   const validateForm = useCallback((): boolean => {
     let isValid = true;
     const newErrors: FormErrors = {};
-
+    console.log("validate", formData)
     // Validar campos requeridos
     requiredFields.forEach(field => {
       const value = formData[field];
@@ -131,7 +131,7 @@ export const useFormData = () => {
     }
     setErrors(newErrors);
     return isValid;
-  }, [formData, validateField]);
+  }, []);
   const handleDateChange = (date: Date | null, field: string = 'fechaNacimiento') => {
     setFormData(prev => ({ ...prev, [field]: date }));
     setFieldInteractions(prev => ({ ...prev, [field]: true }));
@@ -177,7 +177,7 @@ export const useFormData = () => {
 
         return { ...prev, ...updates };
       });
-
+      console.log("formData", formData)
       setFieldInteractions(prev => ({ ...prev, [name]: true }));
       
         const error = validateField(name, value);
@@ -207,7 +207,7 @@ export const useFormData = () => {
     setErrors({});
     setShowAdditionalActions(false);
     setFormSubmitted(false);
-  }, []);
+  }, [getDefaultFormData]);
 
   const handleAddAnother = useCallback(() => {
     setShowAdditionalActions(formData.cantidadHijos > 0);

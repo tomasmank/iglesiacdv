@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { FormData, SetFormData } from '../../interfaces/interfaces';
 import { useFormData } from '../../hooks/useFormData';
+import { useFormContext } from '../../hooks/FormContext';
 
 interface FormularioEspiritualProps {
 }
@@ -46,7 +47,7 @@ const {
   fieldInteractions,
   handleBlur,
   errors
-  } = useFormData();
+  } = useFormContext();
   return (
     <>
       <Divider sx={{ my: 3 }} />

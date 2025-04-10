@@ -1,19 +1,14 @@
 import React from 'react';
 import { Button, Box, Stack, Typography, ButtonProps } from '@mui/material';
+import { useFormData } from '../../hooks/useFormData';
+import { useFormContext } from '../../hooks/FormContext';
 
 interface FormActionsProps {
   // Acciones principales
-  onSubmit: () => void;
-  onReset?: () => void;
-  
-  // Acciones secundarias
-  onAddAnother?: () => void;
-  onKeepChildren?: (keep: boolean) => void;
+  onSubmit: (e:React.FormEvent) => void;
   
   // Estados
   isSubmitted?: boolean;
-  showAdditionalActions?: boolean;
-  hasChildren?: boolean;
   
   // Textos personalizables
   submitText?: string;
@@ -29,12 +24,7 @@ interface FormActionsProps {
 
 const FormActions: React.FC<FormActionsProps> = ({
   onSubmit,
-  onReset,
-  onAddAnother,
-  onKeepChildren,
   isSubmitted = false,
-  showAdditionalActions = false,
-  hasChildren = false,
   submitText = 'Guardar',
   resetText = 'Limpiar',
   addAnotherText = 'Cargar otra Persona',
@@ -43,35 +33,40 @@ const FormActions: React.FC<FormActionsProps> = ({
   submitButtonProps = {},
   resetButtonProps = {},
 }) => {
+  const {
+      showAdditionalActions,
+      resetForm,
+      handleAddAnother,
+    } = useFormContext();
   if (isSubmitted) {
     return (
       <Stack spacing={2} sx={{ textAlign: 'center', mt: 3, mb: 5 }}>
-        {!showAdditionalActions && onAddAnother && (
+        {!showAdditionalActions && handleAddAnother && (
           <Button 
             variant="contained" 
             color="primary" 
-            onClick={onAddAnother}
+            onClick={handleAddAnother}
             fullWidth
           >
             {addAnotherText}
           </Button>
         )}
         
-        {showAdditionalActions && onKeepChildren && (
+        {showAdditionalActions && (
           <>
             <Typography variant="h6">{keepChildrenText}</Typography>
             <Stack direction="row" spacing={2} justifyContent="center">
               <Button 
                 variant="contained" 
                 color="primary" 
-                onClick={() => onKeepChildren(true)}
+                onClick={() => resetForm(true)}
               >
                 Mantener
               </Button>
               <Button 
                 variant="outlined" 
                 color="secondary" 
-                onClick={() => onKeepChildren(false)}
+                onClick={() => resetForm(false)}
               >
                 No Mantener
               </Button>
@@ -97,11 +92,11 @@ const FormActions: React.FC<FormActionsProps> = ({
       px: 1,
       mb: 5
     }}>
-      {onReset && (
+      {resetForm && (
         <Button
           variant="outlined"
           color="secondary"
-          onClick={onReset}
+          onClick={()=> resetForm()}
           {...resetButtonProps}
         >
           {resetText}
@@ -109,10 +104,10 @@ const FormActions: React.FC<FormActionsProps> = ({
       )}
       
       <Button
+        type="submit" 
         variant="contained"
         color="primary"
         onClick={onSubmit}
-        type="submit"
         {...submitButtonProps}
       >
         {submitText}
@@ -121,4 +116,4 @@ const FormActions: React.FC<FormActionsProps> = ({
   );
 };
 
-export default FormActions;
+export default React.memo(FormActions) as typeof FormActions;

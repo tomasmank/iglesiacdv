@@ -3,6 +3,7 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Divider, Typograp
 import { DatePicker } from '@mui/x-date-pickers';
 import FormularioHijos from './FormularioHijos';
 import { useFormData } from '../../hooks/useFormData';
+import { useFormContext } from '../../hooks/FormContext';
 
 interface FormularioPersonalProps {}
 
@@ -16,7 +17,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
     formData,
     setFormData,
     validateField
-  } = useFormData();
+  } = useFormContext();
 
   return (
     <>

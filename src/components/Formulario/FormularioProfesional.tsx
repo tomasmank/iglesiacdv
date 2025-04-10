@@ -2,6 +2,7 @@ import React from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Divider, Typography } from '@mui/material';
 import { FormData, SetFormData } from '../../interfaces/interfaces';
 import { useFormData } from '../../hooks/useFormData';
+import { useFormContext } from '../../hooks/FormContext';
 
 // Puedes extraer esta constante a un archivo de constantes si se usa en otros lugares
 const NIVELES_ESTUDIO = [
@@ -21,7 +22,7 @@ const FormularioProfesional: React.FC<FormularioProfesionalProps> = ({
     const {
       handleChange,
       formData
-      } = useFormData();
+      } = useFormContext();
 
   return (
     <>
