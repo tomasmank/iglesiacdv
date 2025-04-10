@@ -117,13 +117,14 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       {formData.nacionalidad === 'Otra' && (
         <TextField
         name="otraNacionalidad"
-        label="Especifica tu nacionalidad *"  // Asterisco manual para required
+        label="Especifica tu nacionalidad"  // Asterisco manual para required
         value={formData.otraNacionalidad}
         onChange={handleChange}
         onBlur={() => handleBlur('otraNacionalidad')}
         error={!!errors.otraNacionalidad && fieldInteractions.otraNacionalidad}
         helperText={fieldInteractions.otraNacionalidad && errors.otraNacionalidad}
         fullWidth
+        required
         margin="normal"
         inputProps={{
           required: false,  // Desactiva validación HTML nativa
@@ -141,38 +142,59 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Información de Contacto</Typography>
       
       <TextField
-        label="Dirección"
-        name="direccion"
-        value={formData.direccion}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-      />
+  label="Dirección"
+  name="direccion"
+  value={formData.direccion}
+  onChange={handleChange}
+  onBlur={() => handleBlur('direccion')}
+  error={!!errors.direccion && fieldInteractions.direccion}
+  helperText={fieldInteractions.direccion && errors.direccion}
+  fullWidth
+  margin="normal"
+  required
+  inputProps={{
+    required: false, // Desactiva la validación HTML5
+    'aria-required': 'true' // Mantiene accesibilidad
+  }}
+/>
+
     
-      <TextField
-        label="Teléfono"
-        name="telefono"
-        value={formData.telefono}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-        type="tel"
-      />
+<TextField
+  label="Teléfono"
+  name="telefono"
+  value={formData.telefono}
+  onChange={handleChange}
+  onBlur={() => handleBlur('telefono')}
+  error={!!errors.telefono && fieldInteractions.telefono}
+  helperText={fieldInteractions.telefono && errors.telefono}
+  fullWidth
+  margin="normal"
+  required
+  type="tel"
+  inputProps={{
+    required: false, // Desactiva la validación HTML5
+    'aria-required': 'true' // Mantiene accesibilidad
+  }}
+/>
     
-      <TextField
-        label="Email"
-        name="mail"
-        value={formData.mail}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-        type="email"
-        error={!!formData.mail && !errors.mail}
-        helperText={!!formData.mail && !errors.mail ? "Ingrese un email válido" : ""}
-      />
+<TextField
+  label="Email"
+  name="mail"
+  value={formData.mail}
+  onChange={handleChange}
+  onBlur={() => handleBlur('mail')}
+  error={!!errors.mail && fieldInteractions.mail}
+  helperText={fieldInteractions.mail && errors.mail}
+  fullWidth
+  margin="normal"
+  required
+  type="email"
+  inputProps={{
+    required: false, // Desactiva validación HTML5
+    'aria-required': 'true' // Accesibilidad
+  }}
+/>
+
 
       <Divider sx={{ my: 3 }} />
 
@@ -194,21 +216,6 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
             ))}
         </Select>
       </FormControl>
-
-      {formData.estadoCivil === 'Casado' && (
-        <TextField
-        label="Nombre completo del Cónyuge"
-        name="nombreConyuge"
-        value={formData.nombreConyuge}
-        onChange={handleChange}
-        fullWidth
-        margin="normal"
-        required
-        error={!!formData.nombreConyuge && !errors.nombreConyuge}
-        helperText={!errors.nombreConyuge ? "Este campo es requerido para casados" : ""}
-        onBlur={() => handleBlur("nombreConyuge")}
-        />
-      )}
 
       {formData.estadoCivil === 'Casado' && (
         <TextField

@@ -11,7 +11,8 @@ import {
   FormControlLabel,
   Typography,
   Divider,
-  Box
+  Box,
+  FormHelperText
 } from '@mui/material';
 import { FormData, SetFormData } from '../../interfaces/interfaces';
 import { useFormData } from '../../hooks/useFormData';
@@ -42,6 +43,9 @@ const FormularioEspiritual: React.FC<FormularioEspiritualProps> = () => {
 const {
   handleChange,
   formData,
+  fieldInteractions,
+  handleBlur,
+  errors
   } = useFormData();
   return (
     <>
@@ -147,21 +151,38 @@ const {
       </FormControl>
 
       {formData.tieneGPS && (
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Nombre del líder de GPS</InputLabel>
-          <Select
-            name="gpsOption"
-            value={formData.gpsOption}
-            onChange={handleChange}
-            label="Nombre del líder de GPS"
-            sx={{ textAlign: 'left' }}
-          >
-            {LIDERES_GPS.map(lider => (
-              <MenuItem key={lider} value={lider}>{lider}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      )}
+  <FormControl
+    fullWidth
+    margin="normal"
+    required
+    error={!!errors.gpsOption && fieldInteractions.gpsOption}
+  >
+    <InputLabel id="gpsOption-label">Nombre del líder de GPS</InputLabel>
+    <Select
+      labelId="gpsOption-label"
+      name="gpsOption"
+      value={formData.gpsOption}
+      onChange={handleChange}
+      
+      label="Nombre del líder de GPS"
+      sx={{ textAlign: 'left' }}
+      inputProps={{
+        onBlur:() => handleBlur('gpsOption'),
+        required: false, // Desactiva validación HTML5
+        'aria-required': 'true' // Para accesibilidad
+      }}
+    >
+      {LIDERES_GPS.map(lider => (
+        <MenuItem key={lider} value={lider}>
+          {lider}
+        </MenuItem>
+      ))}
+    </Select>
+    {fieldInteractions.gpsOption && errors.gpsOption && (
+      <FormHelperText>{errors.gpsOption}</FormHelperText>
+    )}
+  </FormControl>
+)}
 
       <InputLabel sx={{
             whiteSpace: 'normal',

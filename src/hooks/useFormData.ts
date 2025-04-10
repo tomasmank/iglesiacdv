@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import {FormData} from '../interfaces/interfaces';
 interface FormErrors {
   nombre?: string;
@@ -10,6 +10,7 @@ interface FormErrors {
   mail?: string;
   estadoCivil?: string;
   nombreConyuge?: string;
+  otraNacionalidad?:string;
   [key: string]: string | undefined;
 }
 
@@ -83,15 +84,20 @@ export const useFormData = () => {
       
       case 'estadoCivil':
         return !value ? 'Seleccione un estado civil' : undefined;
-      
+        case 'gpsOption':
+          return !value ? 'Seleccione un lider de GPS' : undefined;
       case 'direccion':
       case 'nacionalidad':
         return !value.trim() ? 'Este campo es obligatorio' : undefined;
-      
+      case 'otraNacionalidad':
+          if (formData.nacionalidad === 'Otra' && !value.trim()) {
+            return 'Por favor especifica tu nacionalidad';
+          }
+          return undefined;
       default:
         return undefined;
     }
-  }, [formData.estadoCivil]);
+  }, [formData.estadoCivil, formData.nacionalidad]);
 
 
   const validateForm = useCallback((): boolean => {
@@ -118,7 +124,11 @@ export const useFormData = () => {
       isValid = false;
       setFieldInteractions(prev => ({ ...prev, nombreConyuge: true }));
     }
-
+    if (formData.nacionalidad === 'Otra' && !formData.otraNacionalidad.trim()) {
+      newErrors.otraNacionalidad = 'Por favor especifica tu nacionalidad';
+      isValid = false;
+      setFieldInteractions(prev => ({ ...prev, otraNacionalidad: true }));
+    }
     setErrors(newErrors);
     return isValid;
   }, [formData, validateField]);
@@ -156,6 +166,12 @@ export const useFormData = () => {
           if (shouldClearConyuge) {
             updates.nombreConyuge = '';
             setFieldInteractions(prev => ({ ...prev, nombreConyuge: false }));
+          }
+        }else if (name === 'nacionalidad') {
+          const shouldClearotraNacionalidad = value !== "Otra";
+          if (shouldClearotraNacionalidad) {
+            updates.otraNacionalidad = '';
+            setFieldInteractions(prev => ({ ...prev, otraNacionalidad: false }));
           }
         }
 
