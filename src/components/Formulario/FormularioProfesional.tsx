@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Divider, Typography } from '@mui/material';
 import { FormData, SetFormData } from '../../interfaces/interfaces';
-import { useFormularioPersonal } from '../../hooks/useFormularioPersonal';
+import { useFormData } from '../../hooks/useFormData';
 
 // Puedes extraer esta constante a un archivo de constantes si se usa en otros lugares
 const NIVELES_ESTUDIO = [
@@ -14,15 +14,14 @@ const NIVELES_ESTUDIO = [
 ] as const; // <-- Usar "as const" para inferencia literal de tipos
 
 interface FormularioProfesionalProps {
-  formData: FormData;
-  setFormData: SetFormData;
 }
 
 const FormularioProfesional: React.FC<FormularioProfesionalProps> = ({ 
-  formData, 
-  setFormData 
 }) => {
-  const { handleChange } = useFormularioPersonal(formData, setFormData);
+    const {
+      handleChange,
+      formData
+      } = useFormData();
 
   return (
     <>

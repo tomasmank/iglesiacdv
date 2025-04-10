@@ -14,11 +14,9 @@ import {
   Box
 } from '@mui/material';
 import { FormData, SetFormData } from '../../interfaces/interfaces';
-import { useFormularioPersonal } from '../../hooks/useFormularioPersonal';
+import { useFormData } from '../../hooks/useFormData';
 
 interface FormularioEspiritualProps {
-  formData: FormData;
-  setFormData: SetFormData;
 }
 
 const LIDERES_GPS = [
@@ -39,10 +37,12 @@ const LIDERES_GPS = [
   'Tomás y Lina Mankowski'
 ];
 
-const FormularioEspiritual: React.FC<FormularioEspiritualProps> = ({ formData, setFormData }) => {
+const FormularioEspiritual: React.FC<FormularioEspiritualProps> = () => {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
-  const { handleChange } = useFormularioPersonal(formData, setFormData);
-
+const {
+  handleChange,
+  formData,
+  } = useFormData();
   return (
     <>
       <Divider sx={{ my: 3 }} />

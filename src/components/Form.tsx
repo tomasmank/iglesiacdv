@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { es } from 'date-fns/locale/es';
@@ -7,37 +7,41 @@ import FormularioPersonal from './Formulario/FormularioPersonal';
 import FormularioProfesional from './Formulario/FormularioProfesional';
 import FormularioEspiritual from './Formulario/FormularioEspiritual';
 import FormActions from './Formulario/FormActions';
+
 const Formulario: React.FC = () => {
-  const { 
-    formData, 
-    setFormData, 
-    resetForm,
-    showAdditionalActions,
-    handleAddAnother,
+  const {
+    formData,
     setFormSubmitted,
-    formSubmitted
+    formSubmitted,
+    showAdditionalActions,
+    resetForm,
+    handleAddAnother,
+    validateForm
   } = useFormData();
 
+  const handleSubmit = () => {
+    const isValid = validateForm(); // Validar al hacer click
+    // Aquí podrías agregar validación antes de enviar
 
-
-
+    if (isValid) {
+      setFormSubmitted(true);
+      // Enviar datos o continuar con el flujo
+    }
+  };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        setFormSubmitted(true);
-      }}>
-        {
-        !formSubmitted && <>
-        <FormularioPersonal formData={formData} setFormData={setFormData} />
-        <FormularioProfesional formData={formData} setFormData={setFormData} />
-        <FormularioEspiritual formData={formData} setFormData={setFormData} />
-        </>
-        }
+      <form autoComplete= 'off'>
+        {!formSubmitted && (
+          <>
+            <FormularioPersonal />
+            <FormularioProfesional />
+            <FormularioEspiritual />
+          </>
+        )}
         <FormActions
-          onSubmit={() => setFormSubmitted(true)}
-          onReset={() => resetForm()}
+          onSubmit={handleSubmit}
+          onReset={resetForm}
           onAddAnother={handleAddAnother}
           onKeepChildren={(keep) => resetForm(keep)}
           isSubmitted={formSubmitted}
@@ -45,11 +49,10 @@ const Formulario: React.FC = () => {
           hasChildren={formData.cantidadHijos > 0}
           submitButtonProps={{ fullWidth: true }}
           resetButtonProps={{ fullWidth: true }}
-
         />
       </form>
     </LocalizationProvider>
   );
 };
 
-export default Formulario;
+export default React.memo(Formulario); // Optimización para evitar re-renders innecesarios

@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, TextField, Divider, Typography } from '@mui/material';
-import { FormData, SetFormData } from '../../interfaces/interfaces';
+import React from 'react';
+import { FormControl, InputLabel, MenuItem, Select, TextField, Divider, Typography, FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
-import { useFormularioPersonal } from '../../hooks/useFormularioPersonal';
 import FormularioHijos from './FormularioHijos';
+import { useFormData } from '../../hooks/useFormData';
 
-interface FormularioPersonalProps {
-  formData: FormData;
-  setFormData: SetFormData;
-}
+interface FormularioPersonalProps {}
 
-const FormularioPersonal: React.FC<FormularioPersonalProps> = ({ formData, setFormData }) => {
-    const {
-      handleChange,
-      handleBlur,
-      validations: { isEmailValid, showConyugeError }
-    } = useFormularioPersonal(formData, setFormData);
+const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
+  const {
+    handleChange,
+    handleBlur,
+    handleDateChange, // Asegúrate de incluir esto
+    errors,
+    fieldInteractions,
+    formData,
+    setFormData,
+    validateField
+  } = useFormData();
+
   return (
     <>
       {/* Sección Datos Personales */}
@@ -26,9 +28,16 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = ({ formData, setFo
         name="nombre"
         value={formData.nombre}
         onChange={handleChange}
+        onBlur={() => handleBlur('nombre')}
+        error={!!errors.nombre && fieldInteractions.nombre}
+        helperText={fieldInteractions.nombre && errors.nombre}
         fullWidth
         margin="normal"
         required
+        inputProps={{
+          required: false,  // Desactiva la validación HTML5
+          'aria-required': 'true'  // Mantiene accesibilidad
+        }}
       />
       
       <TextField
@@ -36,48 +45,94 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = ({ formData, setFo
         name="apellido"
         value={formData.apellido}
         onChange={handleChange}
+        onBlur={() => handleBlur('apellido')}
+        error={!!errors.apellido && fieldInteractions.apellido}
+        helperText={fieldInteractions.apellido && errors.apellido}
         fullWidth
         margin="normal"
         required
+        inputProps={{
+          required: false,  // Desactiva la validación HTML5
+          'aria-required': 'true'  // Mantiene accesibilidad
+        }}
       />
 
-      <FormControl fullWidth margin="normal" required>
-        <DatePicker
-          label="Fecha de Nacimiento"
-          value={formData.fechaNacimiento}
-          onChange={(newValue) => setFormData(prev => ({ ...prev, fechaNacimiento: newValue }))}
-          disableFuture
-        />
-      </FormControl>
-
-      <FormControl fullWidth margin="normal" required>
-        <InputLabel>Nacionalidad</InputLabel>
-        <Select
-          name="nacionalidad"
-          value={formData.nacionalidad}
-          onChange={handleChange}
-          label="Nacionalidad"
-          sx={{ textAlign: 'left' }}
-        >
-          {['Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 
-            'Costa Rica', 'Cuba', 'Ecuador', 'El Salvador', 
-            'Paraguay', 'Perú', 'Uruguay', 'Venezuela', 'Otra']
-            .map(pais => (
-              <MenuItem key={pais} value={pais}>{pais}</MenuItem>
-            ))}
-        </Select>
-      </FormControl>
+<FormControl 
+  fullWidth 
+  margin="normal"
+  error={!!errors.fechaNacimiento && fieldInteractions.fechaNacimiento}
+>
+  <DatePicker
+    label="Fecha de Nacimiento *" // Agregamos el asterisco manualmente
+    value={formData.fechaNacimiento}
+    onChange={(newValue) => handleDateChange(newValue, 'fechaNacimiento')}
+    onClose={() => {
+      validateField('fechaNacimiento', formData.fechaNacimiento);
+    }}
+    disableFuture
+    slotProps={{
+      textField: {
+        onBlur:() => handleBlur('fechaNacimiento'),
+        required: false, // Desactivamos validación HTML5
+        'aria-required': 'true', // Mantenemos accesibilidad
+        error: !!errors.fechaNacimiento && fieldInteractions.fechaNacimiento,
+        helperText: fieldInteractions.fechaNacimiento && errors.fechaNacimiento,
+      },
+    }}
+  />
+</FormControl>
+<FormControl 
+  fullWidth 
+  margin="normal" 
+  required
+  error={!!errors.nacionalidad && fieldInteractions.nacionalidad}
+>
+  <InputLabel>Nacionalidad</InputLabel>
+  <Select
+    name="nacionalidad"
+    value={formData.nacionalidad}
+    onChange={handleChange}
+    label="Nacionalidad"
+    sx={{ textAlign: 'left' }}
+    inputProps={{
+      onBlur:()=>handleBlur('nacionalidad'),
+      required: false, // Desactiva validación HTML nativa
+      'aria-required': 'true' // Mantiene accesibilidad
+    }}
+  >
+    {['Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 
+      'Costa Rica', 'Cuba', 'Ecuador', 'El Salvador',
+      'Paraguay', 'Perú', 'Uruguay', 'Venezuela', 'Otra']
+      .map(pais => (
+        <MenuItem key={pais} value={pais}>{pais}</MenuItem>
+      ))}
+  </Select>
+  {fieldInteractions.nacionalidad && errors.nacionalidad && (
+    <FormHelperText error>
+      {errors.nacionalidad}
+    </FormHelperText>
+  )}
+</FormControl>
       
       {formData.nacionalidad === 'Otra' && (
         <TextField
-          name="otraNacionalidad"
-          label="Especifica tu nacionalidad"
-          value={formData.otraNacionalidad}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-          required
-        />
+        name="otraNacionalidad"
+        label="Especifica tu nacionalidad *"  // Asterisco manual para required
+        value={formData.otraNacionalidad}
+        onChange={handleChange}
+        onBlur={() => handleBlur('otraNacionalidad')}
+        error={!!errors.otraNacionalidad && fieldInteractions.otraNacionalidad}
+        helperText={fieldInteractions.otraNacionalidad && errors.otraNacionalidad}
+        fullWidth
+        margin="normal"
+        inputProps={{
+          required: false,  // Desactiva validación HTML nativa
+          'aria-required': 'true'  // Mantiene accesibilidad
+        }}
+        sx={{
+          display: formData.nacionalidad === 'Otra' ? 'block' : 'none'  // Solo muestra si nacionalidad es "Otra"
+        }}
+      />
       )}
 
       <Divider sx={{ my: 3 }} />
@@ -115,8 +170,8 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = ({ formData, setFo
         margin="normal"
         required
         type="email"
-        error={!!formData.mail && !isEmailValid}
-        helperText={!!formData.mail && !isEmailValid ? "Ingrese un email válido" : ""}
+        error={!!formData.mail && !errors.mail}
+        helperText={!!formData.mail && !errors.mail ? "Ingrese un email válido" : ""}
       />
 
       <Divider sx={{ my: 3 }} />
@@ -149,11 +204,27 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = ({ formData, setFo
         fullWidth
         margin="normal"
         required
-        error={showConyugeError}
-        helperText={showConyugeError ? "Este campo es requerido para casados" : ""}
+        error={!!formData.nombreConyuge && !errors.nombreConyuge}
+        helperText={!errors.nombreConyuge ? "Este campo es requerido para casados" : ""}
         onBlur={() => handleBlur("nombreConyuge")}
         />
       )}
+
+      {formData.estadoCivil === 'Casado' && (
+        <TextField
+          label="Nombre completo del Cónyuge"
+          name="nombreConyuge"
+          value={formData.nombreConyuge}
+          onChange={handleChange}
+          onBlur={() => handleBlur('nombreConyuge')} // Solo usa onBlur
+          error={!!errors.nombreConyuge && fieldInteractions.nombreConyuge}
+          helperText={fieldInteractions.nombreConyuge && errors.nombreConyuge}
+          fullWidth
+          margin="normal"
+          required
+        />
+      )}
+      
       <FormularioHijos
         cantidadHijos={formData.cantidadHijos}
         hijos={formData.hijos}
