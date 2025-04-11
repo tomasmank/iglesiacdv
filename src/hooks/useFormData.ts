@@ -1,18 +1,6 @@
 import { useState, useCallback } from 'react';
-import {FormData} from '../interfaces/interfaces';
-interface FormErrors {
-  nombre?: string;
-  apellido?: string;
-  fechaNacimiento?: string;
-  nacionalidad?: string;
-  direccion?: string;
-  telefono?: string;
-  mail?: string;
-  estadoCivil?: string;
-  nombreConyuge?: string;
-  otraNacionalidad?:string;
-  [key: string]: string | undefined;
-}
+import {FormData, FormErrors} from '../interfaces/interfaces';
+
 
 const getDefaultFormData = (): FormData => ({
   nombre: '',
@@ -64,7 +52,7 @@ export const useFormData = () => {
         return !value.trim() ? 'Este campo es obligatorio' : undefined;
       
       case 'fechaNacimiento':
-        return !value ? 'Debe seleccionar una fecha' : undefined;
+        return !value ? 'Debe seleccionar una fecha de nacimiento' : undefined;
       
       case 'mail':
         if (!value.trim()) return 'Email es obligatorio';
@@ -73,12 +61,12 @@ export const useFormData = () => {
       
       case 'telefono':
         if (!value.trim()) return 'Teléfono es obligatorio';
-        if (value.replace(/\D/g, '').length < 8) return 'Teléfono inválido';
+        if (value.replace(/\D/g, '').length < 10) return 'Teléfono inválido';
         return undefined;
       
       case 'nombreConyuge':
         if (formData.estadoCivil === 'Casado' && !value.trim()) {
-          return 'Nombre del cónyuge es obligatorio para casados';
+          return 'Nombre completo del cónyuge es obligatorio para casados';
         }
         return undefined;
       
@@ -100,11 +88,10 @@ export const useFormData = () => {
   }, [formData.estadoCivil, formData.nacionalidad]);
 
 
-  const validateForm = useCallback((): boolean => {
+  const validateForm = useCallback((formData : FormData): boolean => {
     let isValid = true;
     const newErrors: FormErrors = {};
-    console.log("validate", formData)
-    // Validar campos requeridos
+
     requiredFields.forEach(field => {
       const value = formData[field];
       const error = validateField(field, value);
@@ -114,13 +101,11 @@ export const useFormData = () => {
         isValid = false;
       }
       
-      // Marcar como interactuado para mostrar errores
       setFieldInteractions(prev => ({ ...prev, [field]: true }));
     });
 
-    // Validación condicional para cónyuge
     if (formData.estadoCivil === 'Casado' && !formData.nombreConyuge.trim()) {
-      newErrors.nombreConyuge = 'Nombre del cónyuge es obligatorio para casados';
+      newErrors.nombreConyuge = 'Nombre completo del cónyuge es obligatorio para casados';
       isValid = false;
       setFieldInteractions(prev => ({ ...prev, nombreConyuge: true }));
     }
@@ -133,12 +118,15 @@ export const useFormData = () => {
     return isValid;
   }, []);
   const handleDateChange = (date: Date | null, field: string = 'fechaNacimiento') => {
+    if (field === 'fechaNacimiento' && date != null && date?.getTime() > Date.now()){
+      date = null;
+    }
     setFormData(prev => ({ ...prev, [field]: date }));
     setFieldInteractions(prev => ({ ...prev, [field]: true }));
       const error = validateField(field as keyof FormData, date);
       setErrors(prev => ({ ...prev, [field]: error }));
   };
-  // Manejador de cambios unificado
+
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> | { 
       target: { name?: string; value: any, type?: string } 
@@ -152,7 +140,7 @@ export const useFormData = () => {
       setFormData(prev => {
         const updates: Partial<FormData> = { [name]: value };
         
-        // Lógica para switches
+
         if (name === 'teBautizaste') {
           updates.congregacionBautismo = value ? prev.congregacionBautismo : '';
           updates.añoBautismo = value ? prev.añoBautismo : '';
@@ -160,7 +148,7 @@ export const useFormData = () => {
         else if (name === 'tieneGPS') {
           updates.gpsOption = value ? prev.gpsOption : '';
         }
-        // Lógica para estado civil
+
         else if (name === 'estadoCivil') {
           const shouldClearConyuge = value !== "Casado";
           if (shouldClearConyuge) {
@@ -177,7 +165,6 @@ export const useFormData = () => {
 
         return { ...prev, ...updates };
       });
-      console.log("formData", formData)
       setFieldInteractions(prev => ({ ...prev, [name]: true }));
       
         const error = validateField(name, value);
@@ -194,7 +181,6 @@ export const useFormData = () => {
     setErrors(prev => ({ ...prev, [field]: error }));
   };
 
-  // Función para resetear el formulario
   const resetForm = useCallback((keepChildren = false) => {
     setFormData(prev => ({
       ...getDefaultFormData(),

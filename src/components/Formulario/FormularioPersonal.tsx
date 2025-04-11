@@ -2,7 +2,6 @@ import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select, TextField, Divider, Typography, FormHelperText } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import FormularioHijos from './FormularioHijos';
-import { useFormData } from '../../hooks/useFormData';
 import { useFormContext } from '../../hooks/FormContext';
 
 interface FormularioPersonalProps {}
@@ -11,7 +10,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   const {
     handleChange,
     handleBlur,
-    handleDateChange, // Asegúrate de incluir esto
+    handleDateChange,
     errors,
     fieldInteractions,
     formData,
@@ -21,7 +20,6 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
 
   return (
     <>
-      {/* Sección Datos Personales */}
       <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Datos Personales</Typography>
       
       <TextField
@@ -35,10 +33,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
         fullWidth
         margin="normal"
         required
-        inputProps={{
-          required: false,  // Desactiva la validación HTML5
-          'aria-required': 'true'  // Mantiene accesibilidad
-        }}
+        slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
       />
       
       <TextField
@@ -52,10 +47,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
         fullWidth
         margin="normal"
         required
-        inputProps={{
-          required: false,  // Desactiva la validación HTML5
-          'aria-required': 'true'  // Mantiene accesibilidad
-        }}
+        slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
       />
 
 <FormControl 
@@ -64,7 +56,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   error={!!errors.fechaNacimiento && fieldInteractions.fechaNacimiento}
 >
   <DatePicker
-    label="Fecha de Nacimiento *" // Agregamos el asterisco manualmente
+    label="Fecha de Nacimiento *"
     value={formData.fechaNacimiento}
     onChange={(newValue) => handleDateChange(newValue, 'fechaNacimiento')}
     onClose={() => {
@@ -74,8 +66,8 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
     slotProps={{
       textField: {
         onBlur:() => handleBlur('fechaNacimiento'),
-        required: false, // Desactivamos validación HTML5
-        'aria-required': 'true', // Mantenemos accesibilidad
+        required: false,
+        'aria-required': 'true',
         error: !!errors.fechaNacimiento && fieldInteractions.fechaNacimiento,
         helperText: fieldInteractions.fechaNacimiento && errors.fechaNacimiento,
       },
@@ -97,8 +89,8 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
     sx={{ textAlign: 'left' }}
     inputProps={{
       onBlur:()=>handleBlur('nacionalidad'),
-      required: false, // Desactiva validación HTML nativa
-      'aria-required': 'true' // Mantiene accesibilidad
+      required: false, 
+      'aria-required': 'true' 
     }}
   >
     {['Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 
@@ -118,7 +110,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       {formData.nacionalidad === 'Otra' && (
         <TextField
         name="otraNacionalidad"
-        label="Especifica tu nacionalidad"  // Asterisco manual para required
+        label="Especifica tu nacionalidad"
         value={formData.otraNacionalidad}
         onChange={handleChange}
         onBlur={() => handleBlur('otraNacionalidad')}
@@ -127,19 +119,15 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
         fullWidth
         required
         margin="normal"
-        inputProps={{
-          required: false,  // Desactiva validación HTML nativa
-          'aria-required': 'true'  // Mantiene accesibilidad
-        }}
+        slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
         sx={{
-          display: formData.nacionalidad === 'Otra' ? 'block' : 'none'  // Solo muestra si nacionalidad es "Otra"
+          display: formData.nacionalidad === 'Otra' ? 'block' : 'none'
         }}
       />
       )}
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Sección Contacto */}
       <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Información de Contacto</Typography>
       
       <TextField
@@ -153,10 +141,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   fullWidth
   margin="normal"
   required
-  inputProps={{
-    required: false, // Desactiva la validación HTML5
-    'aria-required': 'true' // Mantiene accesibilidad
-  }}
+  slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
 />
 
     
@@ -172,10 +157,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   margin="normal"
   required
   type="tel"
-  inputProps={{
-    required: false, // Desactiva la validación HTML5
-    'aria-required': 'true' // Mantiene accesibilidad
-  }}
+  slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
 />
     
 <TextField
@@ -190,19 +172,15 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   margin="normal"
   required
   type="email"
-  inputProps={{
-    required: false, // Desactiva validación HTML5
-    'aria-required': 'true' // Accesibilidad
-  }}
+  slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
 />
 
 
       <Divider sx={{ my: 3 }} />
 
-      {/* Sección Estado Familiar */}
       <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>Estado Familiar</Typography>
       
-      <FormControl fullWidth margin="normal" required>
+      <FormControl error={!!errors.estadoCivil && fieldInteractions.estadoCivil} fullWidth margin="normal" required>
         <InputLabel>Estado Civil</InputLabel>
         <Select
           name="estadoCivil"
@@ -210,12 +188,22 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
           onChange={handleChange}
           label="Estado Civil"
           sx={{ textAlign: 'left' }}
+          inputProps={{
+            onBlur:()=>handleBlur('estadocivil'),
+            required: false, 
+            'aria-required': 'true' 
+          }}
         >
           {['Soltero', 'Casado', 'Divorciado', 'Viudo']
             .map(estado => (
               <MenuItem key={estado} value={estado}>{estado}/a</MenuItem>
             ))}
         </Select>
+        {fieldInteractions.estadoCivil && errors.estadoCivil && (
+    <FormHelperText error>
+      {errors.estadoCivil}
+    </FormHelperText>
+  )}
       </FormControl>
 
       {formData.estadoCivil === 'Casado' && (
@@ -224,12 +212,13 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
           name="nombreConyuge"
           value={formData.nombreConyuge}
           onChange={handleChange}
-          onBlur={() => handleBlur('nombreConyuge')} // Solo usa onBlur
+          onBlur={() => handleBlur('nombreConyuge')}
           error={!!errors.nombreConyuge && fieldInteractions.nombreConyuge}
           helperText={fieldInteractions.nombreConyuge && errors.nombreConyuge}
           fullWidth
           margin="normal"
           required
+          slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
         />
       )}
       

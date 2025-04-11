@@ -14,8 +14,6 @@ import {
   Box,
   FormHelperText
 } from '@mui/material';
-import { FormData, SetFormData } from '../../interfaces/interfaces';
-import { useFormData } from '../../hooks/useFormData';
 import { useFormContext } from '../../hooks/FormContext';
 
 interface FormularioEspiritualProps {
@@ -55,14 +53,13 @@ const {
         Información Espiritual
       </Typography>
 
-      {/* Sección Conocimiento y Bautismo */}
       <TextField
         name="añoConocimientoCristo"
         label="Año en el que conociste a Cristo"
         value={formData.añoConocimientoCristo}
         onChange={handleChange}
         type="number"
-        inputProps={{ min: 1900, max: new Date().getFullYear() }}
+        slotProps={{htmlInput:{min:1900, max: new Date().getFullYear()}}}
         fullWidth
         margin="normal"
       />
@@ -108,7 +105,7 @@ const {
             value={formData.añoBautismo}
             onChange={handleChange}
             type="number"
-            inputProps={{ min: 1900, max: new Date().getFullYear() }}
+            slotProps={{htmlInput:{min:1900, max: new Date().getFullYear()}}}
             fullWidth
             margin="normal"
           />
@@ -121,7 +118,6 @@ const {
         value={formData.añoInicioIglesia}
         onChange={handleChange}
         type="number"
-        inputProps={{ min: 1900, max: new Date().getFullYear() }}
         fullWidth
         margin="normal"
         slotProps={{
@@ -132,7 +128,8 @@ const {
               textAlign: 'left',
               marginTop:{xs:'-10px',sm:'0'}
             },
-          }
+          },
+          htmlInput:{min:1900, max: new Date().getFullYear()}
         }}
       />
         <InputLabel>¿Participás de un GPS?</InputLabel>
@@ -169,8 +166,8 @@ const {
       sx={{ textAlign: 'left' }}
       inputProps={{
         onBlur:() => handleBlur('gpsOption'),
-        required: false, // Desactiva validación HTML5
-        'aria-required': 'true' // Para accesibilidad
+        required: false,
+        'aria-required': 'true'
       }}
     >
       {LIDERES_GPS.map(lider => (
@@ -223,7 +220,6 @@ const {
         </RadioGroup>
       </FormControl>
 
-      {/* Sección Ministerios */}
       <Divider sx={{ my: 3 }} />
       <Typography variant="subtitle1" gutterBottom>
         Participación en Ministerios

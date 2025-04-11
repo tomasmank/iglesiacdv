@@ -1,10 +1,7 @@
 import React from 'react';
 import { TextField, FormControl, InputLabel, Select, MenuItem, Divider, Typography } from '@mui/material';
-import { FormData, SetFormData } from '../../interfaces/interfaces';
-import { useFormData } from '../../hooks/useFormData';
 import { useFormContext } from '../../hooks/FormContext';
 
-// Puedes extraer esta constante a un archivo de constantes si se usa en otros lugares
 const NIVELES_ESTUDIO = [
   'Secundario incompleto',
   'Secundario completo',
@@ -12,7 +9,7 @@ const NIVELES_ESTUDIO = [
   'Terciario completo',
   'Universitario incompleto', 
   'Universitario completo'
-] as const; // <-- Usar "as const" para inferencia literal de tipos
+] as const;
 
 interface FormularioProfesionalProps {
 }

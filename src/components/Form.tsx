@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFnsV3';
 import { es } from 'date-fns/locale/es';
-import { useFormData } from '../hooks/useFormData';
+import {FormData} from '../interfaces/interfaces';
 import FormularioPersonal from './Formulario/FormularioPersonal';
 import FormularioProfesional from './Formulario/FormularioProfesional';
 import FormularioEspiritual from './Formulario/FormularioEspiritual';
 import FormActions from './Formulario/FormActions';
-import { FormProvider, useFormContext } from '../hooks/FormContext';
+import { useFormContext } from '../hooks/FormContext';
 
 const Formulario: React.FC = () => {
   const {
@@ -16,13 +16,10 @@ const Formulario: React.FC = () => {
     validateForm
   } = useFormContext();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<Element>, formData: FormData) => {
     e.preventDefault();
-    
-    // Espera a que React actualice el estado (solución para asincronía)
-    await new Promise(resolve => setTimeout(resolve, 0));
-    
-    const isValid = validateForm();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const isValid = validateForm(formData);
   
     if (isValid) {
       setFormSubmitted(true);
@@ -47,4 +44,4 @@ const Formulario: React.FC = () => {
   );
 };
 
-export default Formulario; // Optimización para evitar re-renders innecesarios
+export default Formulario;

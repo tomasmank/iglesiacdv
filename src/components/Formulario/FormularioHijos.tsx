@@ -19,12 +19,11 @@ const FormularioHijos: React.FC<FormularioHijosProps> = ({
   const [modalAbierto, setModalAbierto] = useState(false);
 
   const handleCambioCantidad = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Math.min(50, Math.max(0, Number(e.target.value))); // Asegura valor entre 0-50
+    const value = Math.min(50, Math.max(0, Number(e.target.value)));
     
     if (!isNaN(value)) {
       onCantidadChange(value);
-      
-      // Limpiar hijos si la cantidad es 0 o si se redujo la cantidad
+
       if (value === 0 || value < hijos.length) {
         onHijosChange(value > 0 ? hijos.slice(0, value) : []);
       }
@@ -40,11 +39,7 @@ const FormularioHijos: React.FC<FormularioHijosProps> = ({
         type="number"
         fullWidth
         margin="normal"
-        inputProps={{ 
-          min: 0, 
-          max: 50,
-          step: 1
-        }}
+        slotProps={{htmlInput:{min:0,max:50,step:1}}}
       />
 
       {cantidadHijos > 0 && (
@@ -56,7 +51,7 @@ const FormularioHijos: React.FC<FormularioHijosProps> = ({
             sx={{ 
               mt: 1, 
               mb: 2,
-              width: { xs: '100%', sm: 'auto' } // Mejor responsive
+              width: { xs: '100%', sm: 'auto' }
             }}
           >
             Cargar datos de hijos ({cantidadHijos})

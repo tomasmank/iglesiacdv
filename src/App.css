@@ -28,7 +28,7 @@
   color: #61dafb;
 }
 .custom-placeholder::placeholder {
-  font-size: 8px; /* Cambia este valor como desees */
+  font-size: 8px;
 }
 @keyframes App-logo-spin {
   from {

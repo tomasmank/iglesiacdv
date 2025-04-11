@@ -1,5 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useFormData } from './useFormData'; // Tu hook actual
+import { createContext, useContext, ReactNode } from 'react';
+import { useFormData } from './useFormData';
 
 const FormContext = createContext<ReturnType<typeof useFormData> | undefined>(undefined);
 
@@ -13,7 +13,6 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook para consumir el contexto
 export const useFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {

@@ -3,8 +3,6 @@ import { Container, Box, Typography, createTheme, ThemeProvider, CssBaseline, Ic
 import Formulario from './components/Form';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-
-// Assets
 import logo from './assets/logo.png';
 import logodark from './assets/logodark.png';
 import { FormProvider } from './hooks/FormContext';

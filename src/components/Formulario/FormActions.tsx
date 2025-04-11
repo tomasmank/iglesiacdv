@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Button, Box, Stack, Typography, ButtonProps } from '@mui/material';
-import { useFormData } from '../../hooks/useFormData';
+import {FormData} from '../../interfaces/interfaces'
 import { useFormContext } from '../../hooks/FormContext';
 
 interface FormActionsProps {
-  // Acciones principales
-  onSubmit: (e:React.FormEvent) => void;
+  onSubmit: (e: FormEvent<Element>,formData: FormData) => void;
   
-  // Estados
   isSubmitted?: boolean;
   
-  // Textos personalizables
   submitText?: string;
   resetText?: string;
   addAnotherText?: string;
   keepChildrenText?: string;
   successMessage?: string;
   
-  // Props personalizables
   submitButtonProps?: ButtonProps;
   resetButtonProps?: ButtonProps;
 }
@@ -37,7 +33,9 @@ const FormActions: React.FC<FormActionsProps> = ({
       showAdditionalActions,
       resetForm,
       handleAddAnother,
+      formData
     } = useFormContext();
+
   if (isSubmitted) {
     return (
       <Stack spacing={2} sx={{ textAlign: 'center', mt: 3, mb: 5 }}>
@@ -107,7 +105,7 @@ const FormActions: React.FC<FormActionsProps> = ({
         type="submit" 
         variant="contained"
         color="primary"
-        onClick={onSubmit}
+        onClick={(e) => onSubmit(e,formData)}
         {...submitButtonProps}
       >
         {submitText}

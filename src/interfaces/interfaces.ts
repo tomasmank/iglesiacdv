@@ -9,7 +9,6 @@ export interface DatosHijos {
     hijos: DatosHijos[];
     handleHijosSave: (hijos:DatosHijos[]) => void;
   }
-  export type SetFormData = React.Dispatch<React.SetStateAction<FormData>>;
   export interface FormData {
     nombre: string;
     apellido: string;
@@ -38,5 +37,17 @@ export interface DatosHijos {
     sirviendoMinisterio: string;
     hijos: DatosHijos[];
   }
-  
-export {};
+  export interface FormErrors {
+    nombre?: string;
+    apellido?: string;
+    fechaNacimiento?: string;
+    nacionalidad?: string;
+    direccion?: string;
+    telefono?: string;
+    mail?: string;
+    estadoCivil?: string;
+    nombreConyuge?: string;
+    otraNacionalidad?:string;
+    [key: string]: string | undefined;
+  }
+export { };
