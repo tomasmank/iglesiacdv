@@ -228,7 +228,7 @@ const {
       <TextField
         name="sirvioMinisterio"
         label={
-          focusedInput === "sirvioMinisterio" 
+          focusedInput === "sirvioMinisterio" || formData.sirvioMinisterio
             ? "Ministerios: ¿Serviste?" 
             : "¿Serviste en algún ministerio alguna vez en esta u otra congregación? ¿En cuál?"
         }
@@ -255,7 +255,7 @@ const {
       <TextField
         name="sirviendoMinisterio"
         label={
-          focusedInput === "sirviendoMinisterio" 
+          focusedInput === "sirviendoMinisterio" || formData.sirviendoMinisterio
             ? "Ministerios: ¿Estás sirviendo?" 
             : "¿Estás sirviendo en algún ministerio? ¿En cuál?"
         }
@@ -282,7 +282,7 @@ const {
       <TextField
         name="leGustariaSumarseMinisterio"
         label={
-          focusedInput === "leGustariaSumarseMinisterio" 
+          focusedInput === "leGustariaSumarseMinisterio" || formData.leGustariaSumarseMinisterio
             ? "Ministerios: ¿Te sumarías?" 
             : "¿Te gustaría sumarte a un ministerio? ¿A cuál?"
         }
