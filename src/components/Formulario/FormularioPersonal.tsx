@@ -3,9 +3,10 @@ import { FormControl, InputLabel, MenuItem, Select, TextField, Divider, Typograp
 import { DatePicker } from '@mui/x-date-pickers';
 import FormularioHijos from './FormularioHijos';
 import { useFormContext } from '../../hooks/FormContext';
+import { useSelectores } from '../../utils/useSelectores';
+import { SelectoresResponse } from '../../interfaces/interfaces';
 
 interface FormularioPersonalProps {}
-
 const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   const {
     handleChange,
@@ -15,7 +16,11 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
     fieldInteractions,
     formData,
     setFormData,
-    validateField
+    validateField,
+    nacionalidad,
+    estadoCivil,
+    error,
+    loading,
   } = useFormContext();
 
   return (
@@ -93,12 +98,12 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       'aria-required': 'true' 
     }}
   >
-    {['Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 
-      'Costa Rica', 'Cuba', 'Ecuador', 'El Salvador',
-      'Paraguay', 'Perú', 'Uruguay', 'Venezuela', 'Otra']
+    {!loading && !error && nacionalidad!
       .map(pais => (
-        <MenuItem key={pais} value={pais}>{pais}</MenuItem>
+        <MenuItem key={pais.key} value={pais.key}>{pais.value}</MenuItem>
       ))}
+    {!loading && error && <MenuItem key={error} value="Otra">Ocurrio un error cargando las opciones.</MenuItem> }
+    {loading && <MenuItem key="Cargando" value="Cargando">Cargando...</MenuItem>}
   </Select>
   {fieldInteractions.nacionalidad && errors.nacionalidad && (
     <FormHelperText error>
@@ -194,10 +199,12 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
             'aria-required': 'true' 
           }}
         >
-          {['Soltero', 'Casado', 'Divorciado', 'Viudo']
-            .map(estado => (
-              <MenuItem key={estado} value={estado}>{estado}/a</MenuItem>
-            ))}
+          {!loading && !error && estadoCivil!
+      .map(estadoCivil => (
+        <MenuItem key={estadoCivil.key} value={estadoCivil.key}>{estadoCivil.value}</MenuItem>
+      ))}
+    {!loading && error && <MenuItem key={error} value={error}>Ocurrio un error cargando las opciones.</MenuItem> }
+    {loading && <MenuItem key="Cargando" value="Cargando">Cargando...</MenuItem>}
         </Select>
         {fieldInteractions.estadoCivil && errors.estadoCivil && (
     <FormHelperText error>

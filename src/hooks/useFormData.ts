@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import {FormData, FormErrors} from '../interfaces/interfaces';
+import { useSelectores } from '../utils/useSelectores';
 
 
 const getDefaultFormData = (): FormData => ({
@@ -7,27 +8,27 @@ const getDefaultFormData = (): FormData => ({
   apellido: '',
   fechaNacimiento: null,
   nacionalidad: '',
-  otraNacionalidad: '',
+  otraNacionalidad: null,
   direccion: '',
   telefono: '',
   mail: '',
   estadoCivil: '',
-  nombreConyuge: '',
+  nombreConyuge: null,
   cantidadHijos: 0,
-  profesion: '',
-  estudios: '',
-  añoConocimientoCristo: '',
+  profesion: null,
+  estudios: null,
+  añoConocimientoCristo: null,
   teBautizaste: false,
-  congregacionBautismo: '',
-  añoBautismo: '',
-  añoInicioIglesia: '',
+  congregacionBautismo: null,
+  añoBautismo: null,
+  añoInicioIglesia: null,
   tieneGPS: false,
-  gpsOption: '',
-  seSienteAcompañado: false,
-  comprometido: false,
-  sirvioMinisterio: '',
-  leGustariaSumarseMinisterio: '',
-  sirviendoMinisterio: '',
+  gpsOption: null,
+  seSienteAcompañado: null,
+  comprometido: null,
+  sirvioMinisterio: null,
+  leGustariaSumarseMinisterio: null,
+  sirviendoMinisterio: null,
   hijos: [],
 });
 
@@ -37,7 +38,7 @@ export const useFormData = () => {
   const [errors, setErrors] = useState<FormErrors>({});
   const [showAdditionalActions, setShowAdditionalActions] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
-
+  const {nacionalidad, estadoCivil, gps,loading, error} = useSelectores();
   const requiredFields: (keyof FormData)[] = [
     'nombre', 'apellido', 'fechaNacimiento', 
     'nacionalidad', 'direccion', 'telefono', 
@@ -49,23 +50,23 @@ export const useFormData = () => {
     switch (name) {
       case 'nombre':
       case 'apellido':
-        return !value.trim() ? 'Este campo es obligatorio' : undefined;
+        return !value?.trim() ? 'Este campo es obligatorio' : undefined;
       
       case 'fechaNacimiento':
         return !value ? 'Debe seleccionar una fecha de nacimiento' : undefined;
       
       case 'mail':
-        if (!value.trim()) return 'Email es obligatorio';
+        if (!value?.trim()) return 'Email es obligatorio';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Email inválido';
         return undefined;
       
       case 'telefono':
-        if (!value.trim()) return 'Teléfono es obligatorio';
-        if (value.replace(/\D/g, '').length < 10) return 'Teléfono inválido';
+        if (!value?.trim()) return 'Teléfono es obligatorio';
+        if (value?.replace(/\D/g, '').length < 10) return 'Teléfono inválido';
         return undefined;
       
       case 'nombreConyuge':
-        if (formData.estadoCivil === 'Casado' && !value.trim()) {
+        if (formData.estadoCivil === 'Casado' && !value?.trim()) {
           return 'Nombre completo del cónyuge es obligatorio para casados';
         }
         return undefined;
@@ -76,9 +77,9 @@ export const useFormData = () => {
           return !value ? 'Seleccione un lider de GPS' : undefined;
       case 'direccion':
       case 'nacionalidad':
-        return !value.trim() ? 'Este campo es obligatorio' : undefined;
+        return !value?.trim() ? 'Este campo es obligatorio' : undefined;
       case 'otraNacionalidad':
-          if (formData.nacionalidad === 'Otra' && !value.trim()) {
+          if (formData.nacionalidad === 'Otra' && !value?.trim()) {
             return 'Por favor especifica tu nacionalidad';
           }
           return undefined;
@@ -87,8 +88,25 @@ export const useFormData = () => {
     }
   }, [formData.estadoCivil, formData.nacionalidad]);
 
+  const normalizeForm = (formData: FormData): FormData => {
+    const normalized: FormData = { ...formData };
+  
+    Object.entries(formData).forEach(([key, value]) => {
+      // Solo aplicamos a los campos que permiten null y no son obligatorios
+      if (
+        value === "" ||
+        value === undefined
+      ) {
+        // Usamos type assertion para evitar que explote el TS con el indexado dinámico
+        (normalized as any)[key] = null;
+      }
+    });
+  
+    return normalized;
+  };
 
-  const validateForm = useCallback((formData : FormData): boolean => {
+  const validateForm = useCallback((rawFormData : FormData): boolean => {
+    const formData = normalizeForm(rawFormData); // 👈 normalizamos primero
     let isValid = true;
     const newErrors: FormErrors = {};
 
@@ -104,12 +122,12 @@ export const useFormData = () => {
       setFieldInteractions(prev => ({ ...prev, [field]: true }));
     });
 
-    if (formData.estadoCivil === 'Casado' && !formData.nombreConyuge.trim()) {
+    if (formData.estadoCivil === 'Casado' && !formData.nombreConyuge?.trim()) {
       newErrors.nombreConyuge = 'Nombre completo del cónyuge es obligatorio para casados';
       isValid = false;
       setFieldInteractions(prev => ({ ...prev, nombreConyuge: true }));
     }
-    if (formData.nacionalidad === 'Otra' && !formData.otraNacionalidad.trim()) {
+    if (formData.nacionalidad === 'Otra' && !formData.otraNacionalidad?.trim()) {
       newErrors.otraNacionalidad = 'Por favor especifica tu nacionalidad';
       isValid = false;
       setFieldInteractions(prev => ({ ...prev, otraNacionalidad: true }));
@@ -142,17 +160,17 @@ export const useFormData = () => {
         
 
         if (name === 'teBautizaste') {
-          updates.congregacionBautismo = value ? prev.congregacionBautismo : '';
-          updates.añoBautismo = value ? prev.añoBautismo : '';
+          updates.congregacionBautismo = value ? prev.congregacionBautismo : null;
+          updates.añoBautismo = value ? prev.añoBautismo : null;
         }
         else if (name === 'tieneGPS') {
-          updates.gpsOption = value ? prev.gpsOption : '';
+          updates.gpsOption = value ? prev.gpsOption : null;
         }
 
         else if (name === 'estadoCivil') {
           const shouldClearConyuge = value !== "Casado";
           if (shouldClearConyuge) {
-            updates.nombreConyuge = '';
+            updates.nombreConyuge = null;
             setFieldInteractions(prev => ({ ...prev, nombreConyuge: false }));
           }
         }else if (name === 'nacionalidad') {
@@ -215,6 +233,11 @@ export const useFormData = () => {
     getDefaultFormData,
     handleDateChange,
     validateForm,
-    validateField
+    validateField,
+    error,
+    loading,
+    nacionalidad,
+    gps,
+    estadoCivil
   };
 };

@@ -14,27 +14,27 @@ export interface DatosHijos {
     apellido: string;
     fechaNacimiento: Date | null;
     nacionalidad: string;
-    otraNacionalidad: string;
+    otraNacionalidad: string | null;
     direccion: string;
     telefono: string;
     mail: string;
     estadoCivil: string;
-    nombreConyuge: string;
+    nombreConyuge: string | null;
     cantidadHijos: number;
-    profesion: string;
-    estudios: string;
-    añoConocimientoCristo: string;
+    profesion: string | null;
+    estudios: string | null;
+    añoConocimientoCristo: number |null;
     teBautizaste: boolean;
-    congregacionBautismo: string;
-    añoBautismo: string;
-    añoInicioIglesia: string;
+    congregacionBautismo: string | null;
+    añoBautismo: number | null;
+    añoInicioIglesia: number | null;
     tieneGPS: boolean;
-    gpsOption: string;
-    seSienteAcompañado: boolean;
-    comprometido: boolean;
-    sirvioMinisterio: string;
-    leGustariaSumarseMinisterio: string;
-    sirviendoMinisterio: string;
+    gpsOption: string | null;
+    seSienteAcompañado: string |null;
+    comprometido: string | null;
+    sirvioMinisterio: string |null;
+    leGustariaSumarseMinisterio: string | null;
+    sirviendoMinisterio: string | null;
     hijos: DatosHijos[];
   }
   export interface FormErrors {
@@ -50,4 +50,17 @@ export interface DatosHijos {
     otraNacionalidad?:string;
     [key: string]: string | undefined;
   }
+  // types/KeyValueDTO.ts
+export interface KeyValueDTO {
+  key: string;
+  value: string;
+}
+
+export interface SelectoresResponse {
+  nacionalidad: KeyValueDTO[];
+  gps: KeyValueDTO[];
+  estadoCivil: KeyValueDTO[];
+}
+export type SelectorKey = keyof SelectoresResponse; 
+
 export { };

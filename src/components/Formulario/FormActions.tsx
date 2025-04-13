@@ -1,8 +1,8 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button, Box, Stack, Typography, ButtonProps } from '@mui/material';
 import {FormData} from '../../interfaces/interfaces'
 import { useFormContext } from '../../hooks/FormContext';
-
+import ReCaptcha from 'react-google-recaptcha';
 interface FormActionsProps {
   onSubmit: (e: FormEvent<Element>,formData: FormData) => void;
   
@@ -33,9 +33,15 @@ const FormActions: React.FC<FormActionsProps> = ({
       showAdditionalActions,
       resetForm,
       handleAddAnother,
-      formData
+      formData,
+      handleChange
     } = useFormContext();
-
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const [captchaError, setCaptchaError] = useState<string | null>(null);
+const validator = (e:any) =>{
+  setCaptchaToken(e);
+  setCaptchaError(null);
+}
   if (isSubmitted) {
     return (
       <Stack spacing={2} sx={{ textAlign: 'center', mt: 3, mb: 5 }}>
@@ -82,6 +88,18 @@ const FormActions: React.FC<FormActionsProps> = ({
   }
 
   return (
+    <>
+    <Box sx={{ mb: 2, display:'flex', justifyContent:'center'}}> 
+    <ReCaptcha
+      sitekey='6LdAOxYrAAAAAJlD0uNZF2-ES7XZTW0vR3YJj6tu'
+      onChange={validator}
+    />
+    {captchaError && (
+      <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+        {captchaError}
+      </Typography>
+    )}
+  </Box>
     <Box sx={{ 
       display: 'flex',
       justifyContent: 'flex-end',
@@ -95,22 +113,26 @@ const FormActions: React.FC<FormActionsProps> = ({
           variant="outlined"
           color="secondary"
           onClick={()=> resetForm()}
-          {...resetButtonProps}
+          {...resetButtonProps}  
         >
           {resetText}
         </Button>
       )}
-      
+      {
       <Button
         type="submit" 
         variant="contained"
         color="primary"
-        onClick={(e) => onSubmit(e,formData)}
+        onClick={(e) =>{if (!captchaToken) {
+          setCaptchaError("Por favor, completa el reCAPTCHA para continuar.");
+          return;
+        }; onSubmit(e,formData)}}
         {...submitButtonProps}
       >
         {submitText}
-      </Button>
+      </Button>}
     </Box>
+    </>
   );
 };
 

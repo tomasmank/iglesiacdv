@@ -15,28 +15,16 @@ import {
   FormHelperText
 } from '@mui/material';
 import { useFormContext } from '../../hooks/FormContext';
+import { useSelectores } from '../../utils/useSelectores';
+import { KeyValueDTO, SelectoresResponse } from '../../interfaces/interfaces';
 
 interface FormularioEspiritualProps {
 }
-
-const LIDERES_GPS = [
-  'Ailén y Vanessa',
-  'Alejandra Kruber',
-  'Caro y Joaquín Casale',
-  'Isabella - Wanda',
-  'Joyce Pacheco',
-  'Mara Noya',
-  'Marisol González',
-  'Maru y Pedro Fernández',
-  'Micaela Diaz y Iara',
-  'Mónica Yacenko',
-  'Naiara Kittler',
-  'Natalia Reynoso',
-  'Walter Ángel Colman',
-  'Pablo y Cecilia Cuenca',
-  'Tomás y Lina Mankowski'
+const OPCIONES = [
+  { value: 'Si', label: 'Sí' },
+  { value: 'No', label: 'No' },
+  { value: 'NoSe', label: 'No lo sé' }
 ];
-
 const FormularioEspiritual: React.FC<FormularioEspiritualProps> = () => {
   const [focusedInput, setFocusedInput] = useState<string | null>(null);
 const {
@@ -44,7 +32,10 @@ const {
   formData,
   fieldInteractions,
   handleBlur,
-  errors
+  errors,
+  gps,
+  error,
+  loading
   } = useFormContext();
   return (
     <>
@@ -170,12 +161,13 @@ const {
         'aria-required': 'true'
       }}
     >
-      {LIDERES_GPS.map(lider => (
-        <MenuItem key={lider} value={lider}>
-          {lider}
-        </MenuItem>
-      ))}
-    </Select>
+                {!loading && !error && gps!
+            .map(gps => (
+              <MenuItem key={gps.key} value={gps.key}>{gps.value}</MenuItem>
+            ))}
+          {!loading && error && <MenuItem key={error} value={error}>Ocurrio un error cargando las opciones.</MenuItem> }
+          {loading && <MenuItem key="Cargando" value="Cargando">Cargando...</MenuItem>}
+              </Select>
     {fieldInteractions.gpsOption && errors.gpsOption && (
       <FormHelperText>{errors.gpsOption}</FormHelperText>
     )}
@@ -195,9 +187,14 @@ const {
           row
           sx={{ justifyContent: 'center', mt: 1 }}
         >
-          <FormControlLabel value="Sí" control={<Radio />} label="Sí" />
-          <FormControlLabel value="No" control={<Radio />} label="No" />
-          <FormControlLabel value="No lo sé" control={<Radio />} label="No lo sé" />
+{OPCIONES.map(opcion => (
+    <FormControlLabel 
+      key={opcion.value}
+      value={opcion.value}
+      control={<Radio />}
+      label={opcion.label}
+    />
+  ))}
         </RadioGroup>
       </FormControl>
 
@@ -214,9 +211,14 @@ const {
           row
           sx={{ justifyContent: 'center', mt: 1 }}
         >
-          <FormControlLabel value="Sí" control={<Radio />} label="Sí" />
-          <FormControlLabel value="No" control={<Radio />} label="No" />
-          <FormControlLabel value="No lo sé" control={<Radio />} label="No lo sé" />
+{OPCIONES.map(opcion => (
+    <FormControlLabel 
+      key={opcion.value}
+      value={opcion.value}
+      control={<Radio />}
+      label={opcion.label}
+    />
+  ))}
         </RadioGroup>
       </FormControl>
 

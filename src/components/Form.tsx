@@ -8,16 +8,19 @@ import FormularioProfesional from './Formulario/FormularioProfesional';
 import FormularioEspiritual from './Formulario/FormularioEspiritual';
 import FormActions from './Formulario/FormActions';
 import { useFormContext } from '../hooks/FormContext';
+import { FormLabel } from '@mui/material';
 
 const Formulario: React.FC = () => {
   const {
     setFormSubmitted,
     formSubmitted,
-    validateForm
+    validateForm,
+    error
   } = useFormContext();
 
   const handleSubmit = async (e: FormEvent<Element>, formData: FormData) => {
     e.preventDefault();
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
     const isValid = validateForm(formData);
   
@@ -26,6 +29,7 @@ const Formulario: React.FC = () => {
     }
   };
   return (
+    !error ?
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
         {!formSubmitted && (
           <>
@@ -41,6 +45,7 @@ const Formulario: React.FC = () => {
           resetButtonProps={{ fullWidth: true }}
         />
     </LocalizationProvider>
+  : <FormLabel>{error}</FormLabel>
   );
 };
 
