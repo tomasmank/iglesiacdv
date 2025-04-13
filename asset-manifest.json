@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/iglesiacdv/static/css/main.e6c13ad2.css",
-    "main.js": "/iglesiacdv/static/js/main.f3af5c8c.js",
+    "main.js": "/iglesiacdv/static/js/main.b14342bd.js",
     "static/js/453.ee06d9e5.chunk.js": "/iglesiacdv/static/js/453.ee06d9e5.chunk.js",
     "static/media/logodark.png": "/iglesiacdv/static/media/logodark.6662fefeffbda54c5855.png",
     "static/media/logo.png": "/iglesiacdv/static/media/logo.fbe53b04f216470fdf89.png",
     "index.html": "/iglesiacdv/index.html",
     "main.e6c13ad2.css.map": "/iglesiacdv/static/css/main.e6c13ad2.css.map",
-    "main.f3af5c8c.js.map": "/iglesiacdv/static/js/main.f3af5c8c.js.map",
+    "main.b14342bd.js.map": "/iglesiacdv/static/js/main.b14342bd.js.map",
     "453.ee06d9e5.chunk.js.map": "/iglesiacdv/static/js/453.ee06d9e5.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.f3af5c8c.js"
+    "static/js/main.b14342bd.js"
   ]
 }
