@@ -29,7 +29,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       
       <TextField
         label="Nombre"
-        name="nombre"
+        name="nombre123"
         value={formData.nombre}
         onChange={handleChange}
         onBlur={() => handleBlur('nombre')}
@@ -102,7 +102,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
       .map(pais => (
         <MenuItem key={pais.key} value={pais.key}>{pais.value}</MenuItem>
       ))}
-    {!loading && error && <MenuItem key={error} value="Otra">Ocurrio un error cargando las opciones.</MenuItem> }
+    {!loading && error && <MenuItem key={error} value="ERROR">Ocurrio un error cargando las opciones.</MenuItem> }
     {loading && <MenuItem key="Cargando" value="Cargando">Cargando...</MenuItem>}
   </Select>
   {fieldInteractions.nacionalidad && errors.nacionalidad && (
@@ -112,7 +112,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   )}
 </FormControl>
       
-      {formData.nacionalidad === 'Otra' && (
+      {formData.nacionalidad == nacionalidad?.find(x => x.value == "Otra")?.key && (
         <TextField
         name="otraNacionalidad"
         label="Especifica tu nacionalidad"
@@ -126,7 +126,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
         margin="normal"
         slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
         sx={{
-          display: formData.nacionalidad === 'Otra' ? 'block' : 'none'
+          display: formData.nacionalidad == nacionalidad?.find(x => x.value == "Otra")?.key ? 'block' : 'none'
         }}
       />
       )}
@@ -213,7 +213,7 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
   )}
       </FormControl>
 
-      {formData.estadoCivil === 'Casado' && (
+      {formData.estadoCivil === estadoCivil?.find(x=> x.value == 'Casado')?.key && (
         <TextField
           label="Nombre completo del Cónyuge"
           name="nombreConyuge"
@@ -225,6 +225,9 @@ const FormularioPersonal: React.FC<FormularioPersonalProps> = () => {
           fullWidth
           margin="normal"
           required
+          sx={{
+            display: formData.estadoCivil === estadoCivil?.find(x=> x.value == 'Casado')?.key ? 'block' : 'none'
+          }}
           slotProps={{htmlInput:{required:false,'aria-required': 'true' }}}
         />
       )}

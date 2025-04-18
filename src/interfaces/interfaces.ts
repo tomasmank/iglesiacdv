@@ -62,5 +62,22 @@ export interface SelectoresResponse {
   estadoCivil: KeyValueDTO[];
 }
 export type SelectorKey = keyof SelectoresResponse; 
-
+export interface PersonaResumen{
+  nombreCompleto: string,
+  telefonoPrincipal: string,
+  mailPrincipal: string,
+  hijos: string[],
+  gpsNombre: string,
+}
+export interface AuthConfig {
+  domain: string;
+  clientId: string;
+  authorizationParams: {
+    audience: string;
+    redirect_uri: string;
+    scope: string; // Aunque es string, tiene formato específico
+  };
+  useRefreshTokens?: boolean; // Opcional según la versión de Auth0
+  cacheLocation?: 'memory' | 'localstorage'; // Solo estos valores son válidos
+}
 export { };

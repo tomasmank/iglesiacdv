@@ -4,7 +4,7 @@ import {FormData} from '../../interfaces/interfaces'
 import { useFormContext } from '../../hooks/FormContext';
 import ReCaptcha from 'react-google-recaptcha';
 interface FormActionsProps {
-  onSubmit: (e: FormEvent<Element>,formData: FormData) => void;
+  onSubmit: (e: FormEvent<Element>,formData: FormData, captchaToken: string) => void;
   
   isSubmitted?: boolean;
   
@@ -34,7 +34,7 @@ const FormActions: React.FC<FormActionsProps> = ({
       resetForm,
       handleAddAnother,
       formData,
-      handleChange
+      isLoading
     } = useFormContext();
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const [captchaError, setCaptchaError] = useState<string | null>(null);
@@ -91,7 +91,7 @@ const validator = (e:any) =>{
     <>
     <Box sx={{ mb: 2, display:'flex', justifyContent:'center'}}> 
     <ReCaptcha
-      sitekey='6LdAOxYrAAAAAJlD0uNZF2-ES7XZTW0vR3YJj6tu'
+      sitekey={process.env.REACT_APP_RECAPTCHA_SITEKEY!}
       onChange={validator}
     />
     {captchaError && (
@@ -123,13 +123,14 @@ const validator = (e:any) =>{
         type="submit" 
         variant="contained"
         color="primary"
+        disabled={isLoading}
         onClick={(e) =>{if (!captchaToken) {
           setCaptchaError("Por favor, completa el reCAPTCHA para continuar.");
           return;
-        }; onSubmit(e,formData)}}
+        }; onSubmit(e,formData, captchaToken)}}
         {...submitButtonProps}
       >
-        {submitText}
+        {isLoading ? 'Enviando...' : submitText}
       </Button>}
     </Box>
     </>

@@ -29,21 +29,21 @@ const MOCK_DATA = {
     { key: "Separado", value: "Separado/a" }
   ],
   gps: [
-    { key: "Ailén y Vanessa", value: "Ailén y Vanessa" },
-    { key: "Alejandra Kruber", value: "Alejandra Kruber" },
-    { key: "Caro y Joaquín Casale", value: "Caro y Joaquín Casale" },
-    { key: "Isabella - Wanda", value: "Isabella - Wanda" },
-    { key: "Joyce Pacheco", value: "Joyce Pacheco" },
-    { key: "Mara Noya", value: "Mara Noya" },
-    { key: "Marisol González", value: "Marisol González" },
-    { key: "Maru y Pedro Fernández", value: "Maru y Pedro Fernández" },
-    { key: "Micaela Diaz y Iara", value: "Micaela Diaz y Iara" },
-    { key: "Mónica Yacenko", value: "Mónica Yacenko" },
-    { key: "Naiara Kittler", value: "Naiara Kittler" },
-    { key: "Natalia Reynoso", value: "Natalia Reynoso" },
-    { key: "Walter Ángel Colman", value: "Walter Ángel Colman" },
-    { key: "Pablo y Cecilia Cuenca", value: "Pablo y Cecilia Cuenca" },
-    { key: "Tomás y Lina Mankowski", value: "Tomás y Lina Mankowski" }
+    { key: "1", value: "Ailén y Vanessa" },
+    { key: "2", value: "Alejandra Kruber" },
+    { key: "3", value: "Caro y Joaquín Casale" },
+    { key: "4", value: "Isabella - Wanda" },
+    { key: "5", value: "Joyce Pacheco" },
+    { key: "6", value: "Mara Noya" },
+    { key: "7", value: "Marisol González" },
+    { key: "8", value: "Maru y Pedro Fernández" },
+    { key: "9", value: "Micaela Diaz y Iara" },
+    { key: "10", value: "Mónica Yacenko" },
+    { key: "11", value: "Naiara Kittler" },
+    { key: "12", value: "Natalia Reynoso" },
+    { key: "13", value: "Walter Ángel Colman" },
+    { key: "14", value: "Pablo y Cecilia Cuenca" },
+    { key: "15", value: "Tomás y Lina Mankowski" }
   ]
 };
 

@@ -1,11 +1,17 @@
-import React from 'react';
-import { Container, Box, Typography, createTheme, ThemeProvider, CssBaseline, IconButton, useColorScheme } from '@mui/material';
+import React, { JSX } from 'react';
+import { Container, Box, Typography, createTheme, ThemeProvider, CssBaseline, IconButton, useColorScheme, CircularProgress } from '@mui/material';
 import Formulario from './components/Form';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
-import logo from './assets/logo.png';
-import logodark from './assets/logodark.png';
+
 import { FormProvider } from './hooks/FormContext';
+import PersonasResumen from './components/Resumen/PersonasResumen';
+import { BrowserRouter, Outlet, Route, Routes, useNavigate } from 'react-router-dom';
+import { AppState, Auth0Provider, useAuth0 } from '@auth0/auth0-react';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import { AuthProvider } from './components/Auth/AuthProvider';
+import { AssetProvider, useAssets } from './hooks/AssetsContext';
+import LandingPage from './components/Landing';
 
 const theme = createTheme({
   colorSchemes: {
@@ -14,25 +20,39 @@ const theme = createTheme({
 });
 
 const App: React.FC = () => {
+
   return (
+
+    
     <ThemeProvider theme={theme}>
+      <AssetProvider><>
       <CssBaseline />
-      <Layout />
+      <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route element={<Layout />}>
+                <Route path="/formulario" element={<><FormProvider>
+                  <Formulario>
+                  </Formulario>
+                </FormProvider></>} />
+          
+          <Route path="/personas" element={
+                <ProtectedRoute><PersonasResumen /></ProtectedRoute>
+              } />
+              <Route path="/" element={<LandingPage />} />
+          </Route>
+        </Routes>
+        </AuthProvider>
+      </BrowserRouter>
+      </>
+      </AssetProvider>
     </ThemeProvider>
+
   );
 }
 
 const Layout: React.FC = () => {
-  const { mode, setMode } = useColorScheme();
-  const isDarkMode = mode === 'dark';
-
-  if (!mode) return null;
-
-  const toggleDarkMode = () => setMode(isDarkMode ? 'light' : 'dark');
-  const assets = {
-    logo: isDarkMode ? logodark : logo,
-    background: `${process.env.PUBLIC_URL}/background${isDarkMode ? 'dark' : ''}.png`
-  };
+  const {toggleDarkMode, isDarkMode, background} = useAssets();
 
   return (
     <>
@@ -58,13 +78,8 @@ const Layout: React.FC = () => {
         flexDirection: 'column',
         overflow: 'hidden',
       }}>
-        <BackgroundImage image={assets.background} />
-        
-        <Container maxWidth="sm" sx={{ textAlign: 'center' }}>
-          <Header logo={assets.logo} isDarkMode={isDarkMode} />
-          <FormProvider><Formulario /></FormProvider>
-          
-        </Container>
+        <BackgroundImage image={background} />   
+        <Outlet />
       </Box>
     </>
   );
@@ -86,24 +101,6 @@ const BackgroundImage: React.FC<{ image: string }> = ({ image }) => (
   }} />
 );
 
-const Header: React.FC<{ logo: string; isDarkMode: boolean }> = ({ logo, isDarkMode }) => (
-  <Box sx={{ textAlign: 'center', p: 2.5, borderRadius: 1 }}>
-    <img src={logo} alt="Logo" style={{ width: '150px', height: 'auto', marginBottom: '20px' }} />
-    
-    <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', mb: 1.25 }} color="text.primary">
-      ¡Bendiciones, querido hermano/a!
-    </Typography>
 
-    <Typography variant="body1" gutterBottom sx={{ mb: 1.25 }} color="text.primary">
-    Estamos buscando digitalizar nuestros datos, esto nos permitirá conocernos más
-    y estar más cerca de vos.
-    </Typography>
-
-    <Typography variant="body1" sx={{ mb: 2.5, fontStyle: 'italic' }} color="text.primary">
-    Te agradecemos si te podés tomar unos minutos para completar este formulario.
-    Si tenés dudas, comunicate con nosotros al 221 619-9150.
-    </Typography>
-  </Box>
-);
 
 export default App;

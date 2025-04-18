@@ -39,6 +39,8 @@ export const useFormData = () => {
   const [showAdditionalActions, setShowAdditionalActions] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const {nacionalidad, estadoCivil, gps,loading, error} = useSelectores();
+  const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const requiredFields: (keyof FormData)[] = [
     'nombre', 'apellido', 'fechaNacimiento', 
     'nacionalidad', 'direccion', 'telefono', 
@@ -238,6 +240,10 @@ export const useFormData = () => {
     loading,
     nacionalidad,
     gps,
-    estadoCivil
+    estadoCivil,
+    isLoading,
+    setIsLoading,
+    formError,
+    setFormError
   };
 };
